@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Perfumes Blue Essence</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: white;
+      color: #0a1f44;
+    }
+
+    header {
+      background-color: #0a1f44;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+nav {
+  background-color: #1e3a8a;
+  padding: 10px;
+  text-align: center;
+}
+
+#buscador {
+  width: 60%;
+  max-width: 400px;
+  padding: 10px;
+  border-radius: 20px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .hero {
+      background: linear-gradient(to right, #1e3a8a, #3b82f6);
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .productos {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: 250px;
+  padding: 15px;
+  text-align: center;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+     .card button {
+       width: 70%;          /* 🔹 hace el botón más angosto */
+       margin: 5px auto;    /* 🔹 centra el botón */
+       display: block;
+       font-size: 14px;
+}
+
+    .card img {
+      width: 100%;
+      height: 220px;
+      object-fit: contain;
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 10px;
+}
+
+    .precio {
+      color: #1e3a8a;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    button {
+      background-color: #1e3a8a;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0a1f44;
+    }
+
+    footer {
+      background-color: #0a1f44;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: 20px;
+    }
+
+    .filtros button.activo {
+     background-color: #0a1f44;
+  }
+  </style>
+</head>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  document.addEventListener("DOMContentLoaded", async () => {
+
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "perfumes-4620c.firebaseapp.com",
+      projectId: "perfumes-4620c",
+      storageBucket: "perfumes-4620c.firebasestorage.app",
+      messagingSenderId: "389694902826",
+      appId: "1:389694902826:web:7dcf14438edf0c93bd6953",
+      measurementId: "G-T4Y57EPX58"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const PASSWORD_ADMIN = "AGESSENCE1";
+
+    const descripciones = {
+  "lattafa-asad": {
+    salida: "Pimienta negra, tabaco y piña",
+    corazon: "Café, iris y pachuli",
+    base: "Ámbar, vainilla, maderas secas y benjuí"
+  },
+
+  "lattafa-asad-bourbon": {
+    salida: "lavanda, mirabelle (ciruela amarilla) y pimienta rosa",
+    corazon: "cacao, nuez moscada y davana",
+    base: "vainilla bourbon, ámbar y vetiver"
+  },
+
+  "lattafa-asad-zanzibar": {
+    salida: "lavanda y pimienta negra",
+    corazon: "agua de coco, iris y sal",
+    base: "vainilla e incienso"
+  },
+
+  "lattafa-asad-elixir": {
+    salida: "pimienta rosa, azafrán y pomelo",
+    corazon: "tabaco, cedro y vainilla",
+    base: "pachulí, olíbano, cachemira y ámbar seco"
+  },
+
+  "lattafa-khamra": {
+    salida: "Canela, nuez moscada y bergamota",
+    corazon: "Dátiles, praliné y nardos",
+    base: "Vainilla, haba tonka, ámbar y madera de akigala"
+  },
+
+  "lattafa-khamra-qahwa": {
+    salida: "canela, cardamomo y jengibre",
+    corazon: "praliné, frutas confitadas y flores blancas",
+    base: "café arábico, vainilla, haba tonka, benjuí y almizcle"
+  },
+
+  "lattafa-his-confession": {
+    salida: "canela, lavanda y mandarina",
+    corazon: "iris, benjuí, mahonial y ciprés",
+    base: "vainilla, haba tonka, ámbar, cedro, incienso y pachulí"
+  },
+
+  "lattafa-her-confession": {
+    salida: "canela y Mystikal",
+    corazon: "nardos, jazmín, incienso y mahonial",
+    base: "vainilla, almizcle y haba tonka"
+  },
+
+  "lattafa-the-kingdom": {
+    salida: "lavanda, menta y salvia",
+    corazon: "vainilla, tabaco y flor de azahar del naranjo",
+    base: "haba tonka, benjuí y ládano"
+  },
+
+  "lattafa-qaed-al-fursan": {
+    salida: "piña y azafrán",
+    corazon: "jazmín y abeto balsámico",
+    base: "ámbar, cedro y madera de oud"
+  },
+
+  "lattafa-qaed-al-fursan-unlimited": {
+    salida: "coco, piña y cítricos",
+    corazon: "ylang-ylang, frangipani y jazmín",
+    base: "vainilla, almizcle, sándalo y notas dulces"
+  },
+
+  "lattafa-fakhar-black": {
+    salida: "manzana, bergamota y jengibre",
+    corazon: "lavanda, salvia, bayas de enebro y geranio",
+    base: "haba tonka, cedro, amberwood y vetiver"
+  },
+
+  "lattafa-fakhar-platin": {
+   salida: "bergamota, pimienta rosa y cardamomo",
+   corazon: "guayaba, lavanda y jengibre",
+   base: "incienso, palo santo y sándalo"
+  },
+
+  "lattafa-fakhar-extrait-gold": {
+   salida: "pomelo, cardamomo y pimienta rosa",
+   corazon: "nardos, notas solares y artemisia",
+   base: "ambar, cachemira, cuero y ladano"
+  },
+
+  "lattafa-badee-al-oud-amethyst": {
+   salida: "pimienta rosa y bergamota",
+   corazon: "rosa turca, rosa bulgara y jazmin",
+   base: "oud, ambar y vainilla"
+  },
+
+  "lattafa-badee-al-oud-for-glory": {
+   salida: "azafran, nuez moscada y lavanda",
+   corazon: "oud y pachuli",
+   base: "oud, pachuli y almizcle"
+  },
+
+  "lattafa-badee-al-oud-honor-and-glory": {
+   salida: "pina y creme brulee",
+   corazon: "canela, curcuma, pimienta negra y benjui",
+   base: "vainilla, sandalo, cachemira y musgo"
+  },
+
+  "lattafa-badee-al-oud-noble-blush": {
+   salida: "leche de rosas",
+   corazon: "merengue y almendra",
+   base: "vainilla, sandalo y almizcle"
+  },
+
+  "lattafa-badee-al-oud-sublime": {
+   salida: "manzana, lichi y rosa",
+   corazon: "ciruela y jazmin",
+   base: "musgo, vainilla y pachuli"
+  },
+
+  "lattafa-yara": {
+   salida: "orquidea, heliotropo y mandarina",
+   corazon: "acorde gourmand y frutas tropicales",
+   base: "vainilla, almizcle y sandalo"
+  },
+
+  "lattafa-yara-tous": {
+   salida: "mango, coco y maracuya",
+   corazon: "jazmin, heliotropo y flor de azahar",
+   base: "vainilla, almizcle y cachemira"
+  },
+
+  "lattafa-yara-moi": {
+   salida: "jazmin y durazno",
+   corazon: "caramelo y ambar",
+   base: "pachuli y sandalo"
+  },
+
+  "lattafa-yara-candy": {
+   salida: "mandarina verde y grosella negra",
+   corazon: "gardenia y strawberry fizz candy",
+   base: "vainilla, ambar, sandalo y almizcle"
+  },
+
+  "afnan-9pm": {
+    salida: "Manzana, canela y lavanda",
+    corazon: "Flor de azahar",
+    base: "Vainilla, ámbar y pachuli"
+  },
+
+  "afnan-9am-dive": {
+   salida: "limon, menta, grosella negra y pimienta rosa",
+   corazon: "manzana, cedro e incienso",
+   base: "jengibre, sandalo, pachuli y jazmin"
+  },
+
+  "afnan-9pm-rebel": {
+   salida: "mandarina, pina y manzana granny smith",
+   corazon: "vainilla, cedro y musgo de roble",
+   base: "ambar gris, maderas secas, caramelo y almizcle"
+  },
+
+  "afnan-9pm-elixir": {
+   salida: "cardamomo, nuez moscada y elemi",
+   corazon: "lavanda, cuero y cachemira",
+   base: "vainilla, pachuli, haba tonka y labdano"
+  },
+
+  "afnan-9pm-night-out": {
+   salida: "bergamota, manzana y pimienta rosa",
+   corazon: "lavanda, geranio y cardamomo",
+   base: "vainilla, pachuli, vetiver y haba tonka"
+  },
+
+  "afnan-supremacy-collectors": {
+   salida: "pina, bergamota, manzana y grosella negra",
+   corazon: "abedul, pachuli, jazmin y rosa",
+   base: "almizcle, musgo de roble, ambar gris y vainilla"
+  },
+
+  "afnan-supremacy-collectors-not-only-intense": {
+   salida: "bergamota, manzana y grosella negra",
+   corazon: "lavanda, pachuli y musgo de roble",
+   base: "azafran, almizcle y ambar gris"
+  },
+
+  "armaf-club-de-nuit-intense-man": {
+   salida: "Limón, piña y grosella negra",
+   corazon: "Abedul, jazmín y rosa",
+   base: "Almizcle, vainilla y ámbar gris"
+  },
+
+  "armaf-club-de-nuit-urban-man-elixir": {
+   salida: "bergamota, pimienta rosa, flor de azahar y jazmin",
+   corazon: "lavanda, geranio, vetiver, elemi, azafran y tagetes",
+   base: "ambroxan, ambar, pachuli, cedro y labdano"
+  },
+
+  "armaf-club-de-nuit-untold": {
+   salida: "azafran y jazmin",
+   corazon: "amberwood y ambar gris",
+   base: "resina de abeto y cedro"
+  },
+
+  "armaf-club-de-nuit-precieux": {
+   salida: "pina, caramelo, pera, bergamota, limon y pimienta rosa",
+   corazon: "musgo de roble, maderas blancas, anis, jazmin y lirio de los valles",
+   base: "ambroxan, vainilla, cuero, almizcle blanco, ambar, cedro y pachuli"
+  },
+
+  "armaf-club-de-nuit-iconic": {
+   salida: "pomelo, limon, menta, pimienta rosa y cilantro",
+   corazon: "jengibre, jazmin, melon y nuez moscada",
+   base: "incienso, ambar, cedro, sandalo, labdano y pachuli"
+  },
+
+  "armaf-club-de-nuit-sillage": {
+   salida: "bergamota, limon, lima, hojas de violeta, jengibre y grosella negra",
+   corazon: "iris, rosa y jazmin",
+   base: "ambroxan, almizcle, sandalo y cedro"
+  },
+
+  "armaf-club-de-nuit-milestone": {
+   salida: "frutas rojas, bergamota y notas marinas",
+   corazon: "violeta, maderas blancas y sandalo",
+   base: "almizcle, ambroxan y vetiver"
+  },
+
+  "armaf-odyssey-homme": {
+   salida: "vainilla y ambar",
+   corazon: "iris, especias y notas orientales",
+   base: "vainilla, cuero y jazmin"
+  },
+
+  "armaf-odyssey-homme-white-edition": {
+   salida: "toronja, pimienta rosa y yuzu",
+   corazon: "hojas de violeta y notas marinas",
+   base: "ambar, madera de gaiac y ambar gris"
+  },
+
+  "armaf-odyssey-mandarin-sky": {
+   salida: "mandarina, naranja, azafran y salvia",
+   corazon: "caramelo, haba tonka y tagetes",
+   base: "ambroxan, cedro y vetiver"
+  },
+
+  "armaf-odyssey-mandarin-sky-elixir": {
+   salida: "mandarina, naranja, lavanda, cardamomo y pimienta negra",
+   corazon: "caramelo, haba tonka, pachuli e incienso",
+   base: "vainilla y vetiver"
+  },
+
+  "armaf-odyssey-mega": {
+   salida: "naranja, bergamota, limon, jengibre y menta",
+   corazon: "pina, enebro, salvia y geranio",
+   base: "almizcle, haba tonka, cedro y vetiver"
+  },
+
+  "armaf-odyssey-tyrant": {
+   salida: "pomelo, citricos",
+   corazon: "pimienta, lavanda, geranio y elemi",
+   base: "vetiver, cedro, maderas y ambroxan"
+  },
+
+  "armaf-odyssey-aqua": {
+   salida: "naranja, pomelo y abrótano",
+   corazon: "menta y lavanda",
+   base: "ambroxan, cipres y pachuli"
+  },
+
+  "armaf-odyssey-candee": {
+   salida: "fresa, frambuesa, durazno, bergamota y geranio",
+   corazon: "caramelo, jazmin y maracuya",
+   base: "ambar, pachuli y almizcle"
+  },
+
+  "armaf-odyssey-dubai-chocolate": {
+   salida: "cafe, pistacho, avellana y praliné",
+   corazon: "chocolate, vainilla y cardamomo",
+   base: "caramelo, haba tonka y amberwood"
+  },
+
+  "armaf-odyssey-limoni": {
+   salida: "limon, naranja dulce, mandarina y bergamota",
+   corazon: "azahar del naranjo, notas marinas y jengibre",
+   base: "te, almizcle y ambar"
+  },
+
+  "armaf-odyssey-go-mango": {
+ salida: "limon, jengibre, flores blancas y pimienta rosa",
+ corazon: "mango, madera seca y haba tonka",
+ base: "vainilla, ambar, madera de guaiac, almizcle y notas de frutos secos"
+  },
+
+  "rasasi-hawas-for-him": {
+   salida: "manzana, bergamota, limon y canela",
+   corazon: "notas acuaticas, ciruela, flor de azahar del naranjo y cardamomo",
+   base: "ambar gris, almizcle, pachuli y madera a la deriva"
+  },
+
+  "rasasi-hawas-verde": {
+   salida: "limon, manzana verde y romero",
+   corazon: "jengibre, cedro y patchouli",
+   base: "ambar, almizcle y notas amaderadas"
+  },
+
+  "rasasi-hawas-eclat": {
+   salida: "litchi, pera, bergamota y pistacho",
+   corazon: "rosa e incienso",
+   base: "vainilla, almizcle, ambar y notas amaderadas"
+  },
+
+  "rasasi-hawas-black": {
+   salida: "bergamota, manzana y pimienta rosa",
+   corazon: "lavanda, geranio y salvia",
+   base: "cuero, ámbar, pachulí y vetiver"
+  },
+
+  "rasasi-hawas-ice": {
+   salida: "manzana congelada, limon italiano, bergamota de sicilia y anis estrellado",
+   corazon: "ciruela, flor de azahar del naranjo y cardamomo",
+   base: "almizcle, ambar, musgo cristalino y madera flotante"
+  },
+
+  "rasasi-hawas-tropical": {
+   salida: "agua de coco, hoja de higuera y jengibre",
+   corazon: "coco, higo y menta",
+   base: "sandalo, haba tonka y almizcle"
+  },
+
+  "rasasi-hawas-kobra": {
+   salida: "jengibre, bergamota y mandarina",
+   corazon: "canela, te verde y neroli",
+   base: "almizcle, maderas y ambar"
+  },
+
+  "rasasi-hawas-fire": {
+   salida: "salvia esclarea",
+   corazon: "jazmin egipcio y notas marinas",
+   base: "ambar, ambroxan y notas minerales"
+  },
+
+  "rasasi-hawas-malibu": {
+   salida: "piña, naranja y pomelo",
+   corazon: "lavanda, ámbar e iris",
+   base: "haba tonka, almizcle, cachemira y pachulí"
+  },
+
+  "rasasi-hawas-elixir": {
+   salida: "menta, bergamota y abrótano",
+   corazon: "lavanda, chocolate oscuro y benjuí",
+   base: "vainilla, haba tonka y almizcle blanco"
+  },
+
+  "al-haramain-amber-oud-gold-edition": {
+   salida: "bergamota y notas verdes",
+   corazon: "melon, piña, notas dulces y ambar",
+   base: "vainilla, almizcle y maderas"
+  },
+
+  "al-haramain-amber-oud-dubai-night": {
+   salida: "bergamota, azafran y elemi",
+   corazon: "oud, rosa de bulgaria y lirio de los valles",
+   base: "haba tonka, ambar, almizcle blanco y musgo de roble"
+  },
+
+  "al-haramain-amber-oud-aqua-dubai": {
+   salida: "bergamota, mandarina y notas verdes",
+   corazon: "melón, piña, ámbar y grosella negra",
+   base: "almizcle, petitgrain, gálbano y vainilla"
+  },
+
+  "al-haramain-amber-oud-carbon-edition": {
+   salida: "bergamota, lavanda y romero",
+   corazon: "notas marinas, geranio y salvia",
+   base: "musgo, cedro, vetiver y ambar"
+  },
+
+  "al-haramain-amber-oud-private-edition": {
+   salida: "bergamota, notas verdes",
+   corazon: "melon, notas dulces, ambar, pina y cedro",
+   base: "mirra, resinas, vainilla, almizcle y notas amaderadas"
+  },
+
+  "french-avenue-atlantis": {
+   salida: "naranja, mandarina y limon",
+   corazon: "sandia y coco",
+   base: "cacao, ambar gris y amberwood"
+  },
+
+  "french-avenue-irida-extrait": {
+   salida: "mandarina, bergamota y pera",
+   corazon: "jazmin sambac, flor de azahar y ylang-ylang",
+   base: "vainilla, almizcle blanco y amberwood"
+  },
+
+  "french-avenue-chaos-extrait": {
+   salida: "bergamota, pimienta rosa y mandarina",
+   corazon: "lavanda, geranio y incienso",
+   base: "ambar, vainilla, pachuli y vetiver"
+  },
+
+  "french-avenue-aether-extrait": {
+   salida: "pomelo, bergamota y jengibre",
+   corazon: "lavanda, notas marinas y salvia",
+   base: "ambar gris, vetiver y cedro"
+  },
+
+  "french-avenue-spectre": {
+   salida: "bergamota, limon y pimienta rosa",
+   corazon: "lavanda, incienso y geranio",
+   base: "ambar, pachuli, vetiver y cedro"
+  },
+
+  "french-avenue-ghost-spectre": {
+   salida: "jengibre, bergamota y cardamomo",
+   corazon: "incienso, lavanda y geranio",
+   base: "vainilla, pachuli, cedro y vetiver"
+  },
+
+  "french-avenue-spectre-wraith": {
+   salida: "ron y especias",
+   corazon: "cafe, vetiver, pachuli y sandalo",
+   base: "caña de azucar y labdano"
+  },
+
+  "french-avenue-spectre-marron": {
+   salida: "canela, datiles y mandarina",
+   corazon: "caramelo, tabaco y incienso",
+   base: "vainilla, benjui, mirra y haba tonka"
+  },
+
+  "french-avenue-veneno-black": {
+   salida: "bergamota, pimienta negra y cardamomo",
+   corazon: "lavanda, incienso y pachuli",
+   base: "ambar, vetiver, cedro y cuero"
+  },
+
+  "french-avenue-veneno-bianco": {
+   salida: "bergamota, limon y pimienta rosa",
+   corazon: "flor de azahar, jazmin y lavanda",
+   base: "vainilla, almizcle blanco y cedro"
+  },
+
+  "french-avenue-veneno-scarlet": {
+   salida: "cereza, azafran y pimienta rosa",
+   corazon: "rosa, jazmin y cuero",
+   base: "vainilla, ambar, pachuli y almizcle"
+  },
+
+  "french-avenue-vulcan-feu": {
+   salida: "mango, limon, jengibre y ruibarbo",
+   corazon: "jazmin, pimienta rosa, violeta y praline",
+   base: "haba tonka, cedro, ambar gris y musgo"
+  },
+
+  "french-avenue-vulcan-sable": {
+   salida: "whisky, cilantro, mandarina y naranja",
+   corazon: "cachemira, anís, styrax y tonka",
+   base: "vainilla, benjuí y pachulí"
+  },
+
+  "french-avenue-vulcan-baie": {
+   salida: "litchi, grosella negra y mandarina",
+   corazon: "rosa, peonia y jazmin",
+   base: "vainilla, almizcle blanco y cedro"
+  },
+
+  "french-avenue-liquid-brun": {
+   salida: "canela, cardamomo, flor de azahar y bergamota",
+   corazon: "vainilla bourbon y elemi",
+   base: "praline, ambroxan, madera de gaiac y almizcle"
+  },
+
+  "french-avenue-azzure-aoud": {
+   salida: "maracuya, frutas y rosa",
+   corazon: "oud, benjui y pachuli",
+   base: "cuero, vainilla, amberwood, labdano y madera de gaiac"
+  },
+
+  "french-avenue-cocoa-morado": {
+   salida: "cacao, avellana y canela",
+   corazon: "chocolate oscuro, cafe y caramelo",
+   base: "vainilla, haba tonka y ambar"
+  },
+
+  "maison-alhambra-jean-lowe-azure": {
+   salida: "mandarina y bergamota",
+   corazon: "naranja",
+   base: "jengibre y ambar gris"
+  },
+
+  "maison-alhambra-jean-lowe-fraiche": {
+   salida: "oud y cacao",
+   corazon: "pachuli, rosa, azafran y caramelo",
+   base: "incienso, cuero y grosella negra"
+  },
+
+  "maison-alhambra-jean-lowe-immortal": {
+   salida: "jengibre, pomelo y bergamota",
+   corazon: "romero, notas acuaticas, salvia y geranio",
+   base: "ambroxan, ambar y ladano"
+  },
+
+  "maison-alhambra-jean-lowe-maitre": {
+   salida: "narciso y jazmin",
+   corazon: "rosa y ciclamen",
+   base: "oud, pachuli e incienso"
+  },
+
+  "maison-alhambra-jean-lowe-vibe": {
+   salida: "menta, cidra, naranja, limon, grosella negra y cilantro",
+   corazon: "albaricoque, albahaca, rosa de mayo y semillas de zanahoria",
+   base: "higo, almizcle ambreta y datiles"
+  },
+
+  "maison-alhambra-jean-lowe-noir": {
+   salida: "oud e incienso",
+   corazon: "rosa, frambuesa, azafran y abedul",
+   base: "ambar, benjui y geranio"
+  },
+
+  "maison-alhambra-sceptre-amazonite": {
+   salida: "nuez moscada y canela",
+   corazon: "cipriol y olibano",
+   base: "oud, almizcle negro y azafran"
+  },
+
+  "maison-alhambra-sceptre-bronzite": {
+   salida: "pomelo, bergamota y grosella negra",
+   corazon: "jengibre, canela, citricos y cardamomo",
+   base: "pimienta rosa, pachuli y vetiver"
+  },
+
+  "maison-alhambra-sceptre-desert": {
+   salida: "canela y incienso",
+   corazon: "cuero, tabaco y osmanto",
+   base: "vainilla, pachuli y cedro"
+  },
+
+  "maison-alhambra-sceptre-oceana": {
+   salida: "bergamota, limon y mandarina",
+   corazon: "notas marinas, jengibre y jazmin",
+   base: "ambar gris, almizcle y madera de gaiac"
+  },
+
+  "maison-alhambra-sceptre-malachite": {
+   salida: "mandarina verde, bergamota y grosella negra",
+   corazon: "notas aromaticas, notas especiadas, jazmin, pimienta rosa y lavanda",
+   base: "ambar, almizcle, notas amaderadas y vetiver"
+  },
+
+  "maison-alhambra-glacier-pour-homme": {
+   salida: "lavanda, menta, bergamota y cardamomo",
+   corazon: "flor de azahar, canela y alcaravea",
+   base: "vainilla, haba tonka, sandalo y ambar"
+  },
+
+  "maison-alhambra-glacier-ultra": {
+   salida: "pimienta, canela y limon",
+   corazon: "lavanda, esclarea y pachuli",
+   base: "vainilla, ambar y cedro"
+  },
+
+  "maison-alhambra-glacier-le-noir": {
+   salida: "cardamomo",
+   corazon: "lavanda e iris",
+   base: "vainilla"
+  },
+
+  "maison-alhambra-glacier-gold": {
+   salida: "menta, bergamota, lavanda y cardamomo",
+   corazon: "flor de azahar, canela y comino",
+   base: "vainilla, haba tonka, ambar y sandalo"
+  },
+
+  "maison-alhambra-glacier-bold": {
+   salida: "pina, bergamota e iris",
+   corazon: "madera de coco y cipres",
+   base: "haba tonka, sandalo y ambar"
+  },
+
+  "maison-alhambra-glacier-bella": {
+   salida: "pera, bergamota y pimienta rosa",
+   corazon: "tuberosa, jazmin y ylang-ylang",
+   base: "vainilla, almizcle y pachuli"
+  },
+
+  "maison-alhambra-philos-pura": {
+   salida: "naranja, bergamota y limon",
+   corazon: "frutas",
+   base: "vainilla de madagascar, almizcle blanco y ambar"
+  },
+
+  "maison-alhambra-philos-messenger": {
+   salida: "pomelo, jengibre y bergamota",
+   corazon: "jazmin, magnolia y raiz de lirio",
+   base: "almizcle, ambar, cedro y pachuli"
+  },
+
+  "maison-alhambra-philos-opus-noir": {
+   salida: "frutas y rosa turca",
+   corazon: "ylang-ylang, cuero, nuez moscada y ambar",
+   base: "pachuli, vainilla, vetiver, almizcle y cedro"
+  },
+
+  "maison-alhambra-philos-rosso": {
+   salida: "azafran y bergamota",
+   corazon: "rosa de bulgaria y oud",
+   base: "caña de azucar, haba tonka, ambar blanco y musgo de roble"
+  },
+
+  "maison-alhambra-philos-shine": {
+   salida: "pina, bergamota y pomelo",
+   corazon: "cedro, pachuli y jazmin",
+   base: "musgo de roble y notas amaderadas"
+  },
+
+  "maison-alhambra-yeah-man": {
+   salida: "manzana, bergamota y jengibre",
+   corazon: "salvia, bayas de enebro, geranio y lavanda",
+   base: "haba tonka, cedro, vetiver y amberwood"
+  },
+
+  "maison-alhambra-yeah-man-parfum": {
+   salida: "manzana verde, jengibre y bergamota",
+   corazon: "salvia, bayas de enebro y geranio",
+   base: "amberwood, haba tonka, cedro y olibano"
+  },
+
+  "maison-alhambra-salvo-intense": {
+   salida: "bergamota",
+   corazon: "lavanda, pimienta de sichuan, anis estrellado y nuez moscada",
+   base: "ambroxan y vainilla"
+  },
+
+  "maison-alhambra-extravagant-lover": {
+   salida: "mandarina y pimienta rosa",
+   corazon: "flor de azahar, jazmin y rosa",
+   base: "ambar y vainilla"
+  },
+
+  "rayhaan-jungle-vibe": {
+   salida: "higo, pomelo y bergamota",
+   corazon: "notas verdes y notas acuaticas",
+   base: "sandalo"
+  },
+
+  "rayhaan-tropical-vibe": {
+   salida: "coco, bergamota y jengibre",
+   corazon: "notas tropicales y ylang-ylang",
+   base: "vainilla, almizcle y sandalo"
+  },
+
+  "rayhaan-valhalla": {
+   salida: "frambuesa, coñac y licor",
+   corazon: "haba tonka, rosa bulgara y musgo de roble",
+   base: "sandalo, roble y praline"
+  },
+
+  "rayhaan-corium": {
+   salida: "castana, especias y elemi",
+   corazon: "salvia",
+   base: "vainilla, cuero y oud"
+  },
+
+  "rayhaan-pretty-in-pink": {
+   salida: "pitahaya, kiwi y naranja sanguina",
+   corazon: "jazmin, flor de guayaba y peonia rosa",
+   base: "almizcle, vainilla y ambar"
+  },
+
+  "rayhaan-elixir": {
+   salida: "bergamota y menta",
+   corazon: "benjui y lavanda",
+   base: "vainilla y haba tonka"
+  },
+
+  "bharara-viking-rio": {
+   salida: "maracuya, mango, naranja sanguina y limon",
+   corazon: "jengibre, canela y jazmin",
+   base: "ambar, almizcle y vainilla"
+  },
+
+  "bharara-viking-dubai": {
+   salida: "limon, bergamota, jengibre, pomelo y naranja dulce",
+   corazon: "madera de cachemira, haba tonka, violeta y magnolia",
+   base: "ambroxan, almizcle blanco, pachuli y ambar gris"
+  },
+
+  "bharara-viking-kashmir": {
+   salida: "bergamota, limon y manzana verde",
+   corazon: "lavanda, geranio y cardamomo",
+   base: "ambar, almizcle, pachuli y cedro"
+  },
+
+  "bharara-viking-cairo": {
+   salida: "mandarina, limon y pimienta rosa",
+   corazon: "lavanda, incienso y geranio",
+   base: "ambar, vetiver y cedro"
+  },
+
+  "bharara-viking-beirut": {
+   salida: "bergamota, pomelo y jengibre",
+   corazon: "lavanda, cardamomo y salvia",
+   base: "ambar, vetiver y cedro"
+  },
+
+  "bharara-rose": {
+   salida: "rosa, litchi y bergamota",
+   corazon: "peonia, jazmin y magnolia",
+   base: "almizcle blanco, vainilla y ambar"
+  },
+
+  "bharara-king": {
+   salida: "naranja, bergamota y limon",
+   corazon: "frutas",
+   base: "vainilla, almizcle blanco y ambar"
+  },
+
+  "bharara-queen": {
+   salida: "pera, bergamota y naranja",
+   corazon: "jazmin, flor de azahar y peonia",
+   base: "vainilla, almizcle y ambar"
+  }
+
+};
+
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(async card => {
+      const id = card.getAttribute('data-id');
+      const comprarBtn = card.querySelector('.comprar');
+      const adminBtn = card.querySelector('.admin-btn');
+      const descripcionBtn = card.querySelector('.descripcion-btn');
+
+      const ref = doc(db, "perfumes", id);
+      const snap = await getDoc(ref);
+
+      let estado = snap.exists() ? snap.data().estado : "disponible";
+
+      function actualizarUI() {
+        if (estado === "agotado") {
+          comprarBtn.textContent = "No disponible";
+          comprarBtn.disabled = true;
+          card.style.opacity = "0.5";
+        } else {
+          comprarBtn.textContent = "Comprar";
+          comprarBtn.disabled = false;
+          card.style.opacity = "1";
+        }
+      }
+
+      actualizarUI();
+
+      adminBtn.addEventListener('click', async () => {
+        const input = prompt("Ingrese la contraseña de administrador:");
+
+        if (input !== PASSWORD_ADMIN) {
+          alert("Contraseña incorrecta");
+          return;
+        }
+
+        estado = estado === "disponible" ? "agotado" : "disponible";
+        await setDoc(ref, { estado });
+        actualizarUI();
+      });
+
+      comprarBtn.addEventListener('click', () => {
+        const nombre = card.querySelector('h3').textContent;
+        const mensaje = encodeURIComponent(`Hola, quiero info del perfume ${nombre}`);
+        window.open(`https://ig.me/m/ag.essence__?text=${mensaje}`, '_blank');
+      });
+
+      descripcionBtn.addEventListener('click', () => {
+
+  const perfume = descripciones[id];
+
+  if (!perfume) {
+    alert("Descripción no disponible");
+    return;
+  }
+
+  alert(
+`✨ ${card.querySelector('h3').textContent} ✨
+
+🔹 Notas de salida:
+${perfume.salida}
+
+🔹 Notas de corazón:
+${perfume.corazon}
+
+🔹 Notas de base:
+${perfume.base}`
+  );
+
+});
+
+    });
+
+  });
+</script>
+
+<body>
+
+<header>
+  <h1>A&G Essence</h1>
+  <p>Perfumes exclusivos</p>
+</header>
+
+<nav>
+  <input type="text" id="buscador" placeholder="🔍 Buscar perfume..." onkeyup="buscarPerfume()">
+</nav>
+
+<section class="hero">
+  <h2>Descubrí tu aroma ideal</h2>
+  <p>Elegancia y frescura en cada fragancia</p>
+</section>
+
+<div class="filtros filtros-marca">
+  <button id="btn-todos" class="activo" onclick="filtrarMarca('todos', this)">Todos</button>
+  <button onclick="filtrarMarca('lattafa', this)">Lattafa</button>
+  <button onclick="filtrarMarca('afnan', this)">Afnan</button>
+  <button onclick="filtrarMarca('armaf', this)">Armaf</button>
+  <button onclick="filtrarMarca('rasasi', this)">Rasasi</button>
+  <button onclick="filtrarMarca('al-haramain', this)">Al-Haramain</button>
+  <button onclick="filtrarMarca('french-avenue', this)">French-Avenue</button>
+  <button onclick="filtrarMarca('maison-alhambra', this)">Maison-Alhambra</button>
+  <button onclick="filtrarMarca('rayhaan', this)">Rayhaan</button>
+  <button onclick="filtrarMarca('bharara', this)">Bharara</button>
+</div>
+</div>
+
+<div class="filtros filtros-genero">
+  <button class="activo" onclick="filtrarGenero('todos', this)">Todos</button>
+  <button onclick="filtrarGenero('masculino', this)">Hombre</button>
+  <button onclick="filtrarGenero('femenino', this)">Mujer</button>
+</div>
+
+<section class="productos">
+
+    <div class="card" data-id="lattafa-asad-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://d3cdlnm7te7ky2.cloudfront.net/media/catalog/product/cache/1f1b8d9a1b49678555bea203c2f52e39/1/5/151905-a-asad-edp-100ml.jpg">
+      <h3>Lattafa Asad Decant (5ML)</h3>
+      <p class="precio">$8.700 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+    
+    <div class="card" data-id="lattafa-asad-bourbon-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://acdn-us.mitiendanube.com/stores/002/348/405/products/lattafa-asad-bourbon-perfume-bottle-against-white-background-07da62789abfa149e217447451842944-1024-1024.webp">
+      <h3>Lattafa Asad Bourbon Decant (5ML)</h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-asad-zanzibar-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDIvSGJwEKi2meudFXSMBpUGd_7s-3lno_0Q&s">
+      <h3>Lattafa Asad Zanzibar Decant (5ML)</h3>
+      <p class="precio">$6.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+    
+    <div class="card" data-id="lattafa-asad-elixir-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume-thumbs/375x500.117616.jpg">
+      <h3>Lattafa Asad Elixir Decant (5ML)</h3>
+      <p class="precio">$8.400 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-khamrah-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume/o.75805.jpg">
+      <h3>Lattafa Khamrah Decant (5ML)</h3>
+      <p class="precio">$7.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-khamra-qahwa-decant" data-marca="lattafa"data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume/o.88175.jpg">
+      <h3>Lattafa Khamrah Qahwa Decant (5ML)</h3>
+      <p class="precio">$7.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-his-confession-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAQr71FTv3ZcOMUNHldMdfGwlAJdQ89FvXZQ&s">
+      <h3>Lattafa His Confession Black Decant (5ML)</h3>
+      <p class="precio">$8.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-her-confession-decant" data-marca="lattafa" data-genero="femenino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPbS_yrKRkcW8QIissWOABjYfZsYyBxy1iQA&s">
+      <h3>Lattafa Her Confession White Decant (5ML)</h3>
+      <p class="precio">$8.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-the-kingdom-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_715812-MLA82693195300_032025-C.jpg">
+      <h3>Lattafa The Kingdom Decant (5ML)</h3>
+      <p class="precio">$8.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-qaed-al-fursan-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/1abc29ef5d81b8dc31891d99548028f1dbf2d71908413eeaf776dde273a830c6431537.jpg">
+      <h3>Lattafa Qaed Al Fursan Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-qaed-al-fursan-unlimited-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/46800abeabf9a35412c6e5a6fe579e525f1af7ee1a5db9376342551e6744a28c431537.jpg">
+      <h3>Lattafa Qaed Al Fursan Unlimited Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-fakhar-black-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/c7ee38034c478e7fc22b593d468adfa519488be76f814eedca1c74a09b84989a431537.jpg">
+      <h3>Lattafa Fakhar Black Decant (5ML)</h3>
+      <p class="precio">$8.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-fakhar-platin-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/47f3df1046816506188f597d5f227530636728b858810a4075e44a5a2220a233431537.jpg">
+      <h3>Lattafa Fakhar Platin Decant (5ML)</h3>
+      <p class="precio">$6.600 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-fakhar-extrait-gold-decant" data-marca="lattafa" data-genero="femenino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/c131b30656533ab40bf6552a082e3ce1dc4e50970d349e1c7e1912eea716eb8d431537.jpg">
+      <h3>Lattafa Fakhar Extrait Gold Decant (5ML)</h3>
+      <p class="precio">$6.600 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-badee-al-oud-amethyst-decant" data-marca="lattafa" data-genero="femenino">
+      <img src="https://www.parfumerie.com.ar/pub/media/catalog/product/1/5/151914-a-badee-al-oud-amethyst-edp-100ml.jpg">
+      <h3>Lattafa Badee Al Oud Amethyst Decant (5ML)</h3>
+      <p class="precio">$6.700 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-badee-al-oud-for-glory-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://acdn-us.mitiendanube.com/stores/004/407/494/products/oud-for-glory-a27d0d4cc30843530417100964116395-1024-1024.webp">
+      <h3>Lattafa Badee Al Oud For Glory Decant (5ML)</h3>
+      <p class="precio">$6.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-badee-al-oud-honor-and-glory-decant" data-marca="lattafa" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_908909-MLA92465887356_092025-C.jpg">
+      <h3>Lattafa Badee Al Oud Honor And Glory Decant (5ML)</h3>
+      <p class="precio">$6.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-badee-al-oud-noble-blush-decant" data-marca="lattafa" data-genero="femenino">
+      <img src="https://fimgs.net/mdimg/perfume/o.98937.jpg">
+      <h3>Lattafa Badee Al Oud Noble Blush Decant (5ML)</h3>
+      <p class="precio">$6.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-badee-al-oud-sublime-decant" data-marca="lattafa" data-genero="femenino">
+      <img src="https://fimgs.net/mdimg/perfume/o.83309.jpg">
+      <h3>Lattafa Badee Al Oud Sublime Decant (5ML)</h3>
+      <p class="precio">$6.800 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-yara-decant" data-marca="lattafa" data-genero="femenino">
+      <img src="https://fimgs.net/mdimg/perfume/o.76880.jpg">
+      <h3>Lattafa Yara Decant (5ML)</h3>
+      <p class="precio">$7.200 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-yara-tous-decant" data-marca="lattafa"data-genero="femenino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHJohQQqeQL12VA9kw_z-Dzs1VW56geR8u8Q&s">
+      <h3>Lattafa Yara Tous Decant (5ML)</h3>
+      <p class="precio">$6.600 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-yara-moi-decant" data-marca="lattafa" data-genero="femenino">
+      <img src="https://www.anikashop.com.ar/product_images/b/858/Yara_Moi__97957_zoom.jpg">
+      <h3>Lattafa Yara Moi Decant (5ML)</h3>
+      <p class="precio">$6.400 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="lattafa-yara-candy-decant" data-marca="lattafa" data-genero="femenino">
+      <img src="https://acdn-us.mitiendanube.com/stores/004/928/032/products/010a1eqvsp_720x-61c16e751ee2b68a7517242520809310-640-0.webp">
+      <h3>Lattafa Yara Candy Decant (5ML)</h3>
+      <p class="precio">$6.800 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+
+    <div class="card" data-id="afnan-9pm-decant" data-marca="afnan" data-genero="masculino">
+      <img src="https://d3cdlnm7te7ky2.cloudfront.net/media/catalog/product/cache/1f1b8d9a1b49678555bea203c2f52e39/1/5/156230-a-9pm-black-edp-100ml.jpg">
+      <h3>Afnan 9PM Decant (5ML)</h3>
+      <p class="precio">8.300 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="afnan-9am-dive-decant" data-marca="afnan" data-genero="masculino">
+      <img src="https://acdn-us.mitiendanube.com/stores/004/928/032/products/9am-dive-01_1080x1080-b826b8144ca344eac417252902024831-1024-1024.webp">
+      <h3>Afnan 9AM Dive Decant (5ML)</h3>
+      <p class="precio">$8.800 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="afnan-9pm-rebel-decant" data-marca="afnan" data-genero="masculino">
+      <img src="https://acdn-us.mitiendanube.com/stores/002/348/405/products/afnan-9pm-rebel-frente-c029eca9ae3062144417751647466845-1024-1024.webp">
+      <h3>Afnan 9PM Rebel Decant (5ML)</h3>
+      <p class="precio">$10.400 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="afnan-9pm-elixir-decant" data-marca="afnan" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume-thumbs/375x500.111894.jpg">
+      <h3>Afnan 9PM Elixir Decant (5ML)</h3>
+      <p class="precio">$9.200 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="afnan-9pm-night-out-decant" data-marca="afnan" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume-thumbs/375x500.123313.jpg">
+      <h3>Afnan 9PM Night Out Decant (5ML)</h3>
+      <p class="precio">$11.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="afnan-supremacy-collectors-decant" data-marca="afnan" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_Q_NP_985472-MLA81251660599_122024-O.webp">
+      <h3>Afnan Supremacy Collectors Decant (5ML)</h3>
+      <p class="precio">$12.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="afnan-supremacy-collectors-not-only-intense-decant" data-marca="afnan" data-genero="masculino">
+      <img src="https://m.media-amazon.com/images/I/51p1NXjm6iL._SS1000_.jpg">
+      <h3>Afnan Supremacy Collectors Not Only Intense Decant (5ML)</h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+
+    <div class="card" data-id="armaf-club-de-nuit-intense-man-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://www.parfumerie.com.ar/pub/media/catalog/product/1/5/155114-a-club-de-nuit-intense-men-edt-105ml.jpg">
+      <h3>Armaf Club de Nuit Intense Man Decant (5ML)</h3>
+      <p class="precio">$8.700 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-club-de-nuit-urban-man-elixir-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_933045-MLA74650236558_022024-O.webp">
+      <h3>Armaf Club de Nuit Urban Man Elixir Decant (5ML)</h3>
+      <p class="precio">$9.200 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-club-de-nuit-untold-decant" data-marca="armaf" data-genero="femenino">
+      <img src="https://acdn-us.mitiendanube.com/stores/001/071/596/products/dhthtthth-copia1-4d77234c69ebad2eb116796216205565-480-0.webp">
+      <h3>Armaf Club de Nuit Untold EDP Decant (5ML)</h3>
+      <p class="precio">$8.800 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-club-de-nuit-precieux-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://acdn-us.mitiendanube.com/stores/002/708/808/products/arabe-41-d5deb91501bd7d5c5e17225601378560-1024-1024.webp">
+      <h3>Armaf Club de Nuit Precieux EDP Decant (5ML)</h3>
+      <p class="precio">$16.600 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-club-de-nuit-iconic-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa1z0gPZ6S2EOFd7H01jTGjwJWJE0MfYNNFA&s">
+      <h3>Armaf Club de Nuit Iconic EDP Decant (5ML)</h3>
+      <p class="precio">$9.300 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-club-de-nuit-sillage-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume-thumbs/375x500.88212.jpg">
+      <h3>Armaf Club de Nuit Sillage EDP Decant (5ML)</h3>
+      <p class="precio">$$9.300  ARS</p
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-club-de-nuit-milestone-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://lh3.googleusercontent.com/proxy/YvUKuZCUtuX8Mzf5TDz90_9g1SQ1IJFdjyyLGpS2Myqsx0j0oObM80g2Znqf87NwrcAPPcFWjU9mzzxR3V2Bvx2Yw0P3F1ryRxskV4YxISKEznAHBB7l4oxLmscyTACJO6b8K1D_Utt1eHsMqR2MfGObc3f0zw8Ur1s53wRxML0uU-QXQJaBh4GIq8-C2LS5mA">
+      <h3>Armaf Club de Nuit Milestone Decant (5ML) </h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-odyssey-homme-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume/o.64464.jpg">
+      <h3>Armaf Odyssey Homme Decant (5ML)</h3>
+      <p class="precio">$7.200 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-odyssey-homme-white-edition-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume/o.64466.jpg">
+      <h3>Armaf Odyssey Homme White Edition Decant (5ML)</h3>
+      <p class="precio">$7.200 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-odyssey-mandarin-sky-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdr1Nywn7kGmPrpkhxSyE9cUDDkpbR3sn2Jg&s">
+      <h3>Armaf Odyssey Mandarin Sky Decant (5ML)</h3>
+      <p class="precio">$8.100 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-odyssey-mandarin-sky-elixir-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-8dhOsLa5AI3F9HOiwXLTuOHYMEMzafjrAg&s">
+      <h3>Armaf Odyssey Mandarin Sky Elixir Decant (5ML)</h3>
+      <p class="precio">$10.800 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-odyssey-mega-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_857800-MLA53835336652_022023-O.webp">
+      <h3>Armaf Odyssey Mega Decant (5ML)</h3>
+      <p class="precio">$8.800 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-odyssey-tyrant-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume/o.83135.jpg">
+      <h3>Armaf Odyssey Tyrant Decant (5ML)</h3>
+      <p class="precio">$8.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-odyssey-aqua-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_753958-MLU69767271971_062023-O.webp">
+      <h3>Armaf Odyssey Aqua Decant (5ML)</h3>
+      <p class="precio">$9.100 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-odyssey-candee-decant" data-marca="armaf" data-genero="femenino">
+      <img src="https://acdn-us.mitiendanube.com/stores/003/226/824/products/1024-x-1024-px-2025-05-09t182318-489-7327e5362c6795d94817468258022327-1024-1024.webp">
+      <h3>Armaf Odyssey Candee Decant (5ML)</h3>
+      <p class="precio">$6.900 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-odyssey-dubai-chocolate-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://d3cdlnm7te7ky2.cloudfront.net/media/catalog/product/cache/1f1b8d9a1b49678555bea203c2f52e39/p/s/ps162241-b-odyssey-dubai-chocolat-edp-100ml.jpg">
+      <h3>Armaf Odyssey Dubai Chocolate Decant (5ML)</h3>
+      <p class="precio">$5.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-odyssey-limoni-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume-thumbs/375x500.98695.jpg">
+      <h3>Armaf Odyssey Limoni Decant (5ML)</h3>
+      <p class="precio">$6.700 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="armaf-odyssey-go-mango-decant" data-marca="armaf" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_653810-CBT95076054781_102025-O.webp">
+      <h3>Armaf Odyssey Go Mango Decant (5ML)</h3>
+      <p class="precio">$10.200 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+
+    <div class="card" data-id="rasasi-hawas-for-him-decant" data-marca="rasasi" data-genero="masculino">
+      <img src="https://acdn-us.mitiendanube.com/stores/005/003/704/products/proyecto-nuevo-44-d2fb122a3d259afaf217240884571178-1024-1024.webp">
+      <h3>Rasasi Hawas For Him Decant (5ML)</h3>
+      <p class="precio">$7.200 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="rasasi-hawas-verde-decant" data-marca="rasasi" data-genero="masculino">
+      <img src="https://acdn-us.mitiendanube.com/stores/002/708/808/products/arabe-2025-11-22t161606-621-112b09e39093f1570a17638413620448-640-0.webp">
+      <h3>Rasasi Hawas Verde Decant (5ML)</h3>
+      <p class="precio">$11.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="rasasi-hawas-eclat-decant" data-marca="rasasi" data-genero="femenino">
+      <img src="https://perfumescardales.com.ar/wp-content/uploads/2025/07/Perfumes-Decants-22.jpg">
+      <h3>Rasasi Hawas Eclat Decant (5ML)</h3>
+      <p class="precio">$7.100 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="rasasi-hawas-black-decant" data-marca="rasasi" data-genero="masculino">
+      <img src="https://acdn-us.mitiendanube.com/stores/003/226/824/products/hawas_black_sep_600x600-57929cbdd43a6d6c9217283295598920-640-0.webp">
+      <h3>Rasasi Hawas Black Decant (5ML)</h3>
+      <p class="precio">$8.100 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="rasasi-hawas-ice-decant" data-marca="rasasi" data-genero="masculino">
+      <img src="https://acdn-us.mitiendanube.com/stores/003/226/824/products/1024-x-1024-px-2025-05-10t143127-148-cf372c2ee2877e7a6d17468982913630-1024-1024.webp">
+      <h3>Rasasi Hawas Ice Decant (5ML)</h3>
+      <p class="precio">$10.100 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="rasasi-hawas-tropical-decant" data-marca="rasasi" data-genero="masculino">
+      <img src="https://pardohogar.vtexassets.com/arquivos/ids/800579/image-62e63df04b114273a09b1f301c54490c.jpg?v=638981355648400000">
+      <h3>Rasasi Hawas Tropical Decant (5ML)</h3>
+      <p class="precio">$10.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div> 
+
+    <div class="card" data-id="rasasi-hawas-kobra-decant" data-marca="rasasi" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume-thumbs/375x500.112706.jpg">
+      <h3>Rasasi Hawas Kobra Decant (5ML)</h3>
+      <p class="precio">$11.200 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div> 
+
+    <div class="card" data-id="rasasi-hawas-fire-decant" data-marca="rasasi" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume-thumbs/375x500.101665.jpg">
+      <h3>Rasasi Hawas Fire Decant (5ML)</h3>
+      <p class="precio">$7.700 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div> 
+
+    <div class="card" data-id="rasasi-hawas-malibu-decant" data-marca="rasasi" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_950771-MLA106903796458_022026-O.webp">
+      <h3>Rasasi Hawas Malibu Decant (5ML)</h3>
+      <p class="precio">$75.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div> 
+
+    <div class="card" data-id="rasasi-hawas-elixir-decant" data-marca="rasasi" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_725294-MLA92935901169_092025-O.webp">
+      <h3>Rasasi Hawas Elixir Decant (5ML)</h3>
+      <p class="precio">$7.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div> 
+
+
+    <div class="card" data-id="al-haramain-amber-oud-gold-edition-decant" data-marca="al-haramain" data-genero="masculino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-bW9uwTSu5nrgW_o1KGqWun6iLjNmZnNSWA&s">
+      <h3>Al Haramain Amber Oud Gold Edition Decant (5ML)</h3>
+      <p class="precio">$10.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="al-haramain-amber-oud-dubai-night-decant" data-marca="al-haramain" data-genero="masculino">
+      <img src="https://m.media-amazon.com/images/I/41HsdNlckCL._SL160_.jpg">
+      <h3>Al Haramain Amber Oud Dubai Night Decant (5ML)</h3>
+      <p class="precio">$84.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="al-haramain-amber-oud-aqua-dubai-decant" data-marca="al-haramain" data-genero="masculino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT15ie154U53SYzj2YVaaBLp0o0v-hlL-ZaUA&s">
+      <h3>Al Haramain Amber Oud Aqua Dubai Decant (5ML)</h3>
+      <p class="precio">$12.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="al-haramain-amber-oud-carbon-edition-decant" data-marca="al-haramain" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/28a17dfe1d68fa6d7f34588ace75f9fdc531f2584dc31ff219abeb07a8bb692b431537.jpg">
+      <h3>Al Haramain Amber Oud Carbon Edition Decant (5ML)</h3>
+      <p class="precio">$12.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="al-haramain-amber-oud-private-edition-decant" data-marca="al-haramain" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_Q_NP_632557-CBT73647009895_122023-O.webp">
+      <h3>Al Haramain Amber Oud Private Edition Decant (5ML)</h3>
+      <p class="precio">$12.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-atlantis-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume/o.113595.jpg">
+      <h3>French Avenue Atlantis Decant (5ML)</h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-irida-extrait-decant" data-marca="french-avenue" data-genero="femenino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_620123-MLU78457330916_082024-O.webp">
+      <h3>French Avenue Irida Extrait Decant (5ML)</h3>
+      <p class="precio">$8.300 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-chaos-extrait-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://m.media-amazon.com/images/I/316glLCHNtL._SL160_.jpg">
+      <h3>French Avenue Chaos Extrait Decant (5ML)</h3>
+      <p class="precio">$8.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-aether-extrait-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTloV6mxjAe9NQcmn09ZrYewIBU7nvPoSgVeQ&s">
+      <h3>French Avenue Aether Extrait Decant (5ML)</h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-spectre-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/b472ee6d38dd642080af765693deaae74f948bb11b4ec7a966afa2de9e7f4a46431537.webp">
+      <h3>French Avenue Spectre Decant (5ML)</h3>
+      <p class="precio">$7.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-ghost-spectre-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/110c681de2c9268d67041b5e64537f9b2a3707863eceb54e58685103efeeaf3f431537.jpg">
+      <h3>French Avenue Ghost Spectre Decant (5ML)</h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-spectre-wraith-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/eea549c7b4a08dc485a69c9e6ba1682f90248a047a44aa8bfe28104ebb7a44fd431537.webp">
+      <h3>French Avenue Spectre Wraith Decant (5ML)</h3>
+      <p class="precio">$7.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-spectre-marron-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/4bb0282e32260242e338784c74b7e119f28a78d2a9b5859411dd3e55cd673876431537.jpg">
+      <h3>French Avenue Spectre Marron Decant (5ML)</h3>
+      <p class="precio">$8.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-veneno-black-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/4a02c53ffc899b214479daa6afd187fa48bcd99c59c53e5a4225d37a5114a131431537.jpg">
+      <h3>French Avenue Veneno Black Decant (5ML)</h3>
+      <p class="precio">$10.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-veneno-bianco-decant" data-marca="french-avenue" data-genero="femenino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_838065-MLA86898667431_062025-O.webp">
+      <h3>French Avenue Veneno Bianco Decant (5ML)</h3>
+      <p class="precio">$9.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-veneno-scarlet-decant" data-marca="french-avenue" data-genero="femenino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/9ba7ae807f89522f73d32b5ae9bf134afde3b745897bcd88366f0fe4349f5e55431537.webp">
+      <h3>French Avenue Veneno Scarlet Decant (5ML)</h3>
+      <p class="precio">$10.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-vulcan-feu-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/a8ea86629ea90f1ae61e6b460df6875bb347dfa30a3d795e8f20919b049c30ea431537.jpg">
+      <h3>French Avenue Vulcan Feu Decant (5ML)</h3>
+      <p class="precio">$11.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-vulcan-sable-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/b0af1884c4ce9e42cf1c20d8f23536d67741cfcdfaca0f8e28ec0ff424276148431537.jpg">
+      <h3>French Avenue Vulcan Sable Decant (5ML)</h3>
+      <p class="precio">$7.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-vulcan-sable-decant" data-marca="french-avenue" data-genero="femenino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/de8946adbd7f82d020b9359937857e76bccbb5676c7a47d8e27e8a3f2eb423c6431537.jpg">
+      <h3>French Avenue Vulcan Baie< Decant (5ML)/h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-liquid-brun-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOQeK2uu-D96Wl_XJGhMRGkq3PBAhj6fIeCw&s">
+      <h3>French Avenue Liquid Brun Decant (5ML)</h3>
+      <p class="precio">$10.600 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-azzure-aoud-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/3da9cb7ab0eff7884220d49326b0b1330183e50297ebc2fd87f6a59ac5521d32431537.jpg">
+      <h3>French Avenue Azzure Aoud Decant (5ML)</h3>
+      <p class="precio">$7.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="french-avenue-cocoa-morado-decant" data-marca="french-avenue" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/0c7ffc1b1e60ac5de31e69062d3ad7758730e06556e0e9574a2b5d2f5bd37543431537.jpg">
+      <h3>French Avenue Cocoa Morado Decant (5ML)</h3>
+      <p class="precio">$8.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-jean-lowe-azure-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_880857-MLA82269183177_022025-O.webp">
+      <h3>Maison Alhambra Jean Lowe Azure Decant (5ML)</h3>
+      <p class="precio">$9.800 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-jean-lowe-fraiche-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/a83d2e4eacc90cd508df0e82c185a35bf2516844269b810ef419a4a1cc4fbec3431537.webp">
+      <h3>Maison Alhambra Jean Lowe Fraiche Decant (5ML)</h3>
+      <p class="precio">$5.800 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-jean-lowe-immortal-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/f51019285408bb520468f2a4fa8ce8657f4fcd3ef03119b869210aa7d7e19ca7431537.webp">
+      <h3>Maison Alhambra Jean Lowe Immortal Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-jean-lowe-maitre-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/e7e2062861d22be741435d455fc5142a6792bbe960ae4f8f794ba1b993391c31431537.jpg">
+      <h3>Maison Alhambra Jean Lowe Maitre Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-jean-lowe-vibe-decant" data-marca="maison-alhambra" data-genero="femenino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/4a42e091504024e54f575b53d1946f8bdab92c4b101f4d78ebb54c5ca4320396431537.png">
+      <h3>Maison Alhambra Jean Lowe Vibe Decant (5ML)</h3>
+      <p class="precio">$7.800 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-jean-lowe-noir-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/80bb872788e88638362659cf2aba841309301d2fbe111c18b9f305c156b7c7e9431537.webp">
+      <h3>Maison Alhambra Jean Lowe Noir Decant (5ML)</h3>
+      <p class="precio">$6.200 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-sceptre-amazonite-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/eb1705316568fda235601613b96e1cc2c75ae6b1f3b66c2eb26f688f844beab3431537.jpg">
+      <h3>Maison Alhambra Sceptre Amazonite Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-sceptre-bronzite-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/49641a6d3bebc6082d90791ef1347b56ac0f8c7868f05d437a1bd131816dabef431537.jpg">
+      <h3>Maison Alhambra Sceptre Bronzite Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-sceptre-desert-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/c10c8170cef14be13cea76192c4c6fca0d6e15da24c6264d2747d43985d49161431537.webp">
+      <h3>Maison Alhambra Sceptre Desert Decant (5ML)</h3>
+      <p class="precio">$6.600 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-sceptre-oceana-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/80e42ba2fc50be6e3d91098d0fa4a1833eb5500ce39a311e941dd1ce2bb2be6b431537.webp">
+      <h3>Maison Alhambra Sceptre Oceana Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-sceptre-malachite-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/2a809a0b88a17a37b791354207cc22771eeda8075caafe78d8a1af623f977e41431537.jpg">
+      <h3>Maison Alhambra Sceptre Malachite Decant (5ML)</h3>
+      <p class="precio">$6.700 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-glacier-pour-homme-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/dc9da473addf5cf1ab4429f83be83858e74f7cc76f5d51f3cf0b82852b525969431537.jpg">
+      <h3>Maison Alhambra Glacier Pour Homme Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-glacier-ultra-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_849094-MLU73225124030_122023-O.webp">
+      <h3>Maison Alhambra Glacier Ultra Decant (5ML)</h3>
+      <p class="precio">6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-glacier-le-noir-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_801884-MLU73007304952_112023-O.webp">
+      <h3>Maison Alhambra Glacier Le Noir Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-glacier-gold-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_701095-MLA100021934392_122025-O.webp">
+      <h3>Maison Alhambra Glacier Gold Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-glacier-bold-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_Q_NP_917293-MLU73266637502_122023-O.webp">
+      <h3>Maison Alhambra Glacier Bold Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-glacier-bella-decant" data-marca="maison-alhambra" data-genero="femenino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_655867-MLA83985431460_052025-O.webp">
+      <h3>Maison Alhambra Glacier Bella Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-philos-pura-decant" data-marca="maison-alhambra" data-genero="femenino">
+      <img src="https://http2.mlstatic.com/D_731245-MLA82642600084_032025-C.jpg">
+      <h3>Maison Alhambra Philos Pura Decant (5ML)</h3>
+      <p class="precio">$6.700 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-philos-messenger-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/7b7167d814df65cdf533fb3370ea7fece6db70fae5be7da7d406b302ec541c2b431537.jpg">
+      <h3>Maison Alhambra Philos Messenger Decant (5ML)</h3>
+      <p class="precio">$6.700 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-philos-opus-noir-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/6f6f1b9d47963cc654abf3464551f87275cf94139e1fa6e9336f8c204a8396cb431537.jpg">
+      <h3>Maison Alhambra Philos Opus Noir Decant (5ML)</h3>
+      <p class="precio">$5.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-philos-rosso-decant" data-marca="maison-alhambra" data-genero="femenino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/2f87a62afa533176eef1facbbd3dba3171e022ee3d8c2d75e3edda7fa5faf0ea431537.jpg">
+      <h3>Maison Alhambra Philos Rosso</h3>
+      <p class="precio">$5.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-philos-shine-decant" data-marca="maison-alhambra" data-genero="femenino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/f2ce9e148f4242eee8c955057e7afcbb566358c2589a3b9923c1beba6b47e72d431537.jpg">
+      <h3>Maison Alhambra Philos Shine Decant (5ML)</h3>
+      <p class="precio">$5.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-yeah-man-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/453fac8e932e0b50825415450b5081e456f7dd039df44a3200979b71abb0f874431537.webp">
+      <h3>Maison Alhambra Yeah Man Decant (5ML)</h3>
+      <p class="precio">$5.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-yeah-man-parfum" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/6839ed974fd30798dfc9008e2ce525f38aeda6721a8ce9f04460ff57e69562da431537.jpg">
+      <h3>Maison Alhambra Yeah Man Parfum Decant (5ML)</h3>
+      <p class="precio">$6.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-salvo-intense-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/b5f3a133be0dcba67cdd2b5e6f0561b4a9497cd3fe7c70a8da8766ce0e8d6d06431537.jpg">
+      <h3>Maison Alhambra Salvo Intense Decant (5ML)</h3>
+      <p class="precio">$6.700 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="maison-alhambra-extravagant-lover-decant" data-marca="maison-alhambra" data-genero="masculino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwvt0w8UOkjmM6bLpoppW_ONDzO-g_yU3FMQ&s">
+      <h3>Maison Alhambra Extravagant Lover Decant (5ML)</h3>
+      <p class="precio">$5.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="rayhaan-jungle-vibe-decant" data-marca="rayhaan" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/1311d460c5ac688ded8a278ad55721f09c1b7c8f9bbc27d58bb1c53e95b1bbf1431537.webp">
+      <h3>Rayhaan Jungle Vibe Decant (5ML)</h3>
+      <p class="precio">$7.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="rayhaan-tropical-vibe-decant" data-marca="rayhaan" data-genero="masculino">
+      <img src="https://fimgs.net/mdimg/perfume-thumbs/375x500.118507.jpg">
+      <h3>Rayhaan Tropical Vibe Decant (5ML)</h3>
+      <p class="precio">$7.800 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="rayhaan-valhalla-decant" data-marca="rayhaan" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/2613aea4f20c7f60a594035de2e436fd84db841b9c7ea538679f43ac12c4ab27431537.jpg">
+      <h3>Rayhaan Valhalla Decant (5ML)</h3>
+      <p class="precio">$8.500 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="rayhaan-corium-decant" data-marca="rayhaan" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/21d323b2275330e9734fb97b1ecdf7ddb7769dac19b9cf3c4331474cd8694d72431537.jpg">
+      <h3>Rayhaan Corium Decant (5ML)</h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="rayhaan-pretty-in-pink-decant" data-marca="rayhaan" data-genero="femenino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/8a7891b2ff3874e314ba27aa2a94f73957b6f2f1a790e127600eaa6ea3340f90431537.jpg">
+      <h3>Rayhaan Pretty In Pink Decant (5ML)</h3>
+      <p class="precio">$8.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="rayhaan-elixir-decant" data-marca="rayhaan" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/afd741867601224e3b13a1ea46774394d3e1852b4e5aee6923c2883c6778f0e9431537.jpg">
+      <h3>Rayhaan Elixir Decant (5ML)</h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="bharara-viking-rio-decant" data-marca="bharara" data-genero="masculino">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdKETHWVjaRTF2ZY-bZi6LU8ARgbZUL7Kr4A&s">
+      <h3>Bharara Viking Rio Decant (5ML)</h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="bharara-viking-dubai-decant" data-marca="bharara" data-genero="masculino">
+      <img src="https://http2.mlstatic.com/D_NQ_NP_959271-MLA69947271918_062023-O.webp">
+      <h3>Bharara Viking Dubai Decant (5ML)</h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="bharara-viking-kashmir-decant" data-marca="bharara" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/c589ab89da0e8e3943a1c64440a3dae24cdd26b21155b0afea8f67681c40583c431537.jpg">
+      <h3>Bharara Viking Kashmir Decant (5ML)</h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="bharara-viking-cairo-decant" data-marca="bharara" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/af7d02f1dcd6e654a78f88b46942f1b2ae0869d293d3031770e78531feebd947431537.jpg">
+      <h3>Bharara Viking Cairo Decant (5ML)</h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="bharara-viking-beirut-decant" data-marca="bharara" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/e22c40166a551bf5df98c152a91a5ca00f6dbf86cda4c4dc37905d5b004b5431431537.png">
+      <h3>Bharara Viking Beirut Decant (5ML)</h3>
+      <p class="precio">$9.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="bharara-rose-decant" data-marca="bharara" data-genero="femenino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/3109c68b4b1b9d26747ad0bbc079e1a67ee3840dab2036c2099a2747664f568c431537.jpg">
+      <h3>Bharara Rose Decant (5ML)</h3>
+      <p class="precio">$11.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="bharara-king-decant" data-marca="bharara" data-genero="masculino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/62f38e11d586b5842faf8a89ebd1eb35424014af310fab5c3e63508f4d014e98431537.jpg">
+      <h3>Bharara King Decant (5ML)</h3>
+      <p class="precio">$12.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+    <div class="card" data-id="bharara-queen-decant" data-marca="bharara" data-genero="femenino">
+      <img src="https://d22fxaf9t8d39k.cloudfront.net/00456210b9569328328cbc62d4c46e68139e964cc02d9946da973c9bc2180034431537.jpg">
+      <h3>Bharara Queen Decant (5ML)</h3>
+      <p class="precio">$11.000 ARS</p>
+       <button class="comprar">Comprar</button>
+       <button class="descripcion-btn">Descripción</button>
+       <button class="admin-btn">Cambiar estado</button>
+    </div>
+
+
+
+
+</section>
+
+
+<footer>
+  <p>© 2026 Blue Essence - Todos los derechos reservados</p>
+</footer>
+
+
+<script>
+let marcaActual = "todos";
+let generoActual = "todos";
+
+function aplicarFiltros() {
+  const productos = document.querySelectorAll('.card');
+
+  productos.forEach(p => {
+    const marca = p.getAttribute('data-marca');
+    const genero = p.getAttribute('data-genero');
+
+    const coincideMarca = (marcaActual === "todos" || marca === marcaActual);
+    const coincideGenero = (generoActual === "todos" || genero === generoActual);
+
+    if (coincideMarca && coincideGenero) {
+      p.style.display = "flex";
+    } else {
+      p.style.display = "none";
+    }
+  });
+}
+
+function filtrarMarca(marca, boton) {
+  marcaActual = marca;
+
+  document.querySelectorAll('.filtros-marca button')
+    .forEach(btn => btn.classList.remove('activo'));
+
+  boton.classList.add('activo');
+
+  aplicarFiltros();
+}
+
+function filtrarGenero(genero, boton) {
+  generoActual = genero;
+
+  document.querySelectorAll('.filtros-genero button')
+    .forEach(btn => btn.classList.remove('activo'));
+
+  boton.classList.add('activo');
+
+  aplicarFiltros();
+}
+</script>
+
+<script>
+function buscarPerfume() {
+  const input = document.getElementById("buscador").value.toLowerCase();
+  const productos = document.querySelectorAll(".card");
+
+  productos.forEach(card => {
+    const nombre = card.querySelector("h3").textContent.toLowerCase();
+
+    if (nombre.includes(input)) {
+      card.style.display = "flex";
+    } else {
+      card.style.display = "none";
+    }
+  });
+}
+</script>
+
+
+</body>
+</html>
